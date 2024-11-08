@@ -37,8 +37,8 @@
 1. **Клонируйте репозиторий:**
 
 ```bash
-git clone <Ваша ссылка на репозиторий>
-cd <имя_репозитория>
+git clone https://github.com/bulka-tureckaya/simple_project.git
+cd simple_project
 ```
 
 2. **Установите виртуальное окружение:**
@@ -67,3 +67,33 @@ from loguru import logger
 # Настройка логирования с использованием loguru для вывода в консоль
 logger.add(sys.stderr, level="INFO")
 ```
+## Postman
+
+Для проверки работы приложения я использую Postman
+
+![postman](https://github.com/user-attachments/assets/9f18ac05-6636-45f3-9e14-9691fa1c9212)
+
+Отправка POST-запроса для создания элемента:
+
+![post](https://github.com/user-attachments/assets/8ee92e7d-2a70-414c-a4a7-dc91d930f1e9)
+
+![send1](https://github.com/user-attachments/assets/d3193c9f-fcca-4ff3-bd3b-304b9171eff4)
+
+Отправка GET-запроса для чтения элемента:
+
+![get](https://github.com/user-attachments/assets/bdf36373-5049-4802-a7cb-d3392779c2c7)
+
+![send2](https://github.com/user-attachments/assets/f0b40eb3-41ee-4d86-86f9-e3f715f2b992)
+
+Отправка PUT-запроса для обновления элемента:
+
+![put](https://github.com/user-attachments/assets/3d111975-87f6-47f7-b43d-9437c5a30bb8)
+
+![send3](https://github.com/user-attachments/assets/69f5c538-1c99-43a6-81f4-816029ed1db4)
+
+Отправка DELETE-запроса для удаления элемента:
+
+![delete](https://github.com/user-attachments/assets/10eb8f0f-16a8-4393-851b-3a8227e7e30d)
+
+![send4](https://github.com/user-attachments/assets/22adad22-c8bb-41be-bc34-d1d593faa273)
+

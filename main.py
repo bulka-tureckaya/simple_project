@@ -1,13 +1,13 @@
-import logging
+import sys
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from loguru import logger
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Настройка логирования с использованием loguru для вывода в консоль
+logger.add(sys.stderr, level="INFO")
 
 DATABASE_URL = "postgresql://user:password@db:5432/mydatabase"
 
@@ -31,7 +31,7 @@ def clear_database():
         db.execute(text("TRUNCATE TABLE items RESTART IDENTITY CASCADE;"))
         db.commit()
     except Exception as e:
-        logger.error("Error clearing database: %s", e)
+        logger.error("Error clearing database: {}", e)
         db.rollback()
     finally:
         db.close()
@@ -47,50 +47,50 @@ class ItemCreate(BaseModel):
 
 @app.post("/items/", response_model=ItemCreate)
 def create_item(item: ItemCreate):
-    logger.info("Creating item: %s", item.name)
+    logger.info("Creating item: {}", item.name)
     db = SessionLocal()
     db_item = Item(name=item.name, description=item.description)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    logger.info("Item created: %s", db_item.id)
+    logger.info("Item created: {}", db_item.id)
     return db_item
 
 @app.get("/items/{item_id}", response_model=ItemCreate)
 def read_item(item_id: int):
-    logger.info("Reading item: %s", item_id)
+    logger.info("Reading item: {}", item_id)
     db = SessionLocal()
     db_item = db.query(Item).filter(Item.id == item_id).first()
     if db_item is None:
-        logger.warning("Item not found: %s", item_id)
+        logger.warning("Item not found: {}", item_id)
         raise HTTPException(status_code=404, detail="Item not found")
-    logger.info("Item read: %s", db_item.id)
+    logger.info("Item read: {}", db_item.id)
     return db_item
 
 @app.put("/items/{item_id}", response_model=ItemCreate)
 def update_item(item_id: int, item: ItemCreate):
-    logger.info("Updating item: %s", item_id)
+    logger.info("Updating item: {}", item_id)
     db = SessionLocal()
     db_item = db.query(Item).filter(Item.id == item_id).first()
     if db_item is None:
-        logger.warning("Item not found: %s", item_id)
+        logger.warning("Item not found: {}", item_id)
         raise HTTPException(status_code=404, detail="Item not found")
     db_item.name = item.name
     db_item.description = item.description
     db.commit()
     db.refresh(db_item)
-    logger.info("Item updated: %s", db_item.id)
+    logger.info("Item updated: {}", db_item.id)
     return db_item
 
 @app.delete("/items/{item_id}")
 def delete_item(item_id: int):
-    logger.info("Deleting item: %s", item_id)
+    logger.info("Deleting item: {}", item_id)
     db = SessionLocal()
     db_item = db.query(Item).filter(Item.id == item_id).first()
     if db_item is None:
-        logger.warning("Item not found: %s", item_id)
+        logger.warning("Item not found: {}", item_id)
         raise HTTPException(status_code=404, detail="Item not found")
     db.delete(db_item)
     db.commit()
-    logger.info("Item deleted: %s", item_id)
+    logger.info("Item deleted: {}", item_id)
     return {"detail": "Item deleted"}
